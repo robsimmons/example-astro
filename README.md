@@ -1,4 +1,4 @@
-# Example disco Astro static site
+# Example Astro site with disco
 
 You can clone this repo, OR you can follow these steps to make the repo
 yourself:

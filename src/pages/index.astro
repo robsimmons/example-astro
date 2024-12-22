@@ -1,5 +1,10 @@
 ---
 // Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+
+const rand0 = Math.floor(Math.random() * 10000);
+
+// try commenting this out and seeing what changes
+export const prerender = false;
 ---
 
 <!doctype html>
@@ -13,5 +18,28 @@
   </head>
   <body>
     <h1>Disco astronaut 🕺👩‍🚀</h1>
+    <button id="rand1">Get a random number from /rand1</button>
+    <button id="rand2">Get a random number from /rand2</button>
+    <ul id="randos">
+      <li>Here's a random number: {rand0}</li>
+    </ul>
   </body>
+  <script>
+    const list = document.getElementById("randos");
+    async function addRando(n: number) {
+      const response = await fetch(`/rand${n}`).then((response) =>
+        response.json()
+      );
+      const item = document.createElement("li");
+      item.innerText = `Here's a random number: ${response.value}`;
+      list?.appendChild(item);
+    }
+
+    document
+      .getElementById("rand1")
+      ?.addEventListener("click", () => addRando(1));
+    document
+      .getElementById("rand2")
+      ?.addEventListener("click", () => addRando(2));
+  </script>
 </html>
