@@ -10,3 +10,8 @@ RUN npm install
 # copy rest and build
 COPY . /code/.
 RUN --mount=type=secret,id=.env env $(cat /run/secrets/.env | xargs) npm run build
+
+# start the server
+ENV HOST=0.0.0.0
+ENV PORT=4321
+CMD ["node", "/code/dist/server/entry.mjs"]

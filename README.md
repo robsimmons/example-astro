@@ -1,48 +1,86 @@
-# Astro Starter Kit: Basics
+# Example disco Astro static site
 
-```sh
-npm create astro@latest -- --template basics
-```
+You can clone this repo, OR you can follow these steps to make the repo
+yourself:
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+1. Create a site with [Astro](https://astro.build/):
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+   ```sh
+   npm create astro@latest
+   ```
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+   This will walk you through creating an Astro site.
 
-## 🚀 Project Structure
+2. [Create a new repository on github](https://github.com/new). These
+   instructions will refer to the repository as USERNAME/REPONAME, but it'll
+   actually be something like `john/my-site`.
 
-Inside of your Astro project, you'll see the following folders and files:
+3. Navigate to the directory that you created:
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+   ```sh
+   cd REPODIR
+   ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+   above, replace `REPODIR` with whereever you told Astro to put your project
+   (e.g. `./my-project`).
 
-## 🧞 Commands
+4. Push your new site to github:
 
-All commands are run from the root of the project, from a terminal:
+   ```sh
+   git remote add origin git@github.com:USERNAME/REPONAME.git
+   git branch -M main
+   git push -u origin main
+   ```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+   above, replace `USERNAME/REPONAME` with your username and the repository
+   you created (e.g. `john/my-project`)
 
-## 👀 Want to learn more?
+5. Install the [node adapter](https://docs.astro.build/en/guides/integrations-guide/node/)
+   to enable Astro's "on-demand rendered routes."
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+   ```sh
+   npx astro add node
+   ```
+
+6. Add [this Dockerfile](Dockerfile) to your project:
+
+   ```
+   FROM node:latest
+
+   WORKDIR /code
+
+   # start with dependencies to enjoy caching
+   COPY ./package.json /code/package.json
+   COPY ./package-lock.json /code/package-lock.json
+   RUN npm install
+
+   # copy rest and build
+   COPY . /code/.
+   RUN --mount=type=secret,id=.env env $(cat /run/secrets/.env | xargs) npm run build
+
+   # start the server
+   ENV HOST=0.0.0.0
+   ENV PORT=4321
+   CMD ["node", "/code/dist/server/entry.mjs"]
+   ```
+
+7. Add [this disco.json file](disco.json) to your project:
+
+   ```
+   {
+     "version": "1.0",
+     "services": {
+       "web": {
+         "port": 4321
+       }
+     }
+   }
+   ```
+
+8. Add those files to git and push:
+
+   ```sh
+   git add package.json package-lock.json astro.config.mjs Dockerfile disco.json
+   git commit -a -m "Ready to disco 🪩"
+   git push
+   ```
