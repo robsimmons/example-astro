@@ -45,7 +45,7 @@ yourself:
 6. Add [this Dockerfile](Dockerfile) to your project:
 
    ```
-   FROM node:latest
+   FROM node:lts
 
    WORKDIR /code
 
